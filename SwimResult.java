@@ -8,15 +8,16 @@ public class SwimResult {
 	private int discipline;
 	private String event;
 	private int placement;
+   
+   public SwimResult()
+   {
+      
+   }
 
 	public String getName() {
 		return this.name;
 	}
 
-	/**
-	 * 
-	 * @param name
-	 */
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -25,10 +26,6 @@ public class SwimResult {
 		return this.result;
 	}
 
-	/**
-	 * 
-	 * @param result
-	 */
 	public void setResult(int result) {
 		this.result = result;
 	}
@@ -37,10 +34,6 @@ public class SwimResult {
 		return this.date;
 	}
 
-	/**
-	 * 
-	 * @param date
-	 */
 	public void setDate(DateTime date) {
 		this.date = date;
 	}
@@ -49,10 +42,6 @@ public class SwimResult {
 		return this.discipline;
 	}
 
-	/**
-	 * 
-	 * @param discipline
-	 */
 	public void setDiscipline(int discipline) {
 		this.discipline = discipline;
 	}
@@ -61,10 +50,6 @@ public class SwimResult {
 		return this.event;
 	}
 
-	/**
-	 * 
-	 * @param event
-	 */
 	public void setEvent(String event) {
 		this.event = event;
 	}
@@ -73,10 +58,6 @@ public class SwimResult {
 		return this.placement;
 	}
 
-	/**
-	 * 
-	 * @param placement
-	 */
 	public void setPlacement(int placement) {
 		this.placement = placement;
 	}
