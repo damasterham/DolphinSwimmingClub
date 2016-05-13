@@ -1,17 +1,32 @@
-package DolhpinSwimClubDCD;
 
+import java.text.SimpleDateFormat;
 public class SwimResult {
 
 	private String name;
 	private int result;
-	private DateTime date;
+	private SimpleDateFormat date;
 	private int discipline;
 	private String event;
 	private int placement;
    
    public SwimResult()
    {
-      
+   
+   }
+   
+   public SwimResult(String name, int result, SimpleDateFormat date, int discipline)
+   {
+      setName(name);
+      setResult(result);
+      setDate(date);
+      setDiscipline(discipline);
+   }
+   
+   public SwimResult(String name, int result, SimpleDateFormat date, int discipline, String event, int placement)
+   {
+      this(name,result,date,discipline);
+      setEvent(event);
+      setPlacement(placement);
    }
 
 	public String getName() {
@@ -30,11 +45,11 @@ public class SwimResult {
 		this.result = result;
 	}
 
-	public DateTime getDate() {
+	public SimpleDateFormat getDate() {
 		return this.date;
 	}
 
-	public void setDate(DateTime date) {
+	public void setDate(SimpleDateFormat date) {
 		this.date = date;
 	}
 
