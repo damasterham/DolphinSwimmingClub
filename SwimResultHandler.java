@@ -2,6 +2,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import java.text.DateFormat;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.io.File;
 import java.io.PrintStream;
@@ -32,27 +34,29 @@ public class SwimResultHandler
 		//throw new UnsupportedOperationException();
 	}
    
-   private boolean saveToFile(String filename, String formattedText)
+   private boolean saveToFile(String filename, String extension, String formattedText)
    {
+      String path;
       File file;
       PrintStream output;
       boolean success;
-      
+            
+            
+      path = String.format("%s.%s",filename, extension);            
       success = false;
       
       try
       {
-         file = new File(filename);
+         file = new File(path);
          
          if (file.exists() == false)
          {
-            if (file.createNewFile())
-            {
-               output = new PrintStream(file);
-               output.print(formattedText);  
-               success = true;             
-            }
+            file.createNewFile();                                                   
          }
+         
+         output = new PrintStream(file);
+         output.print(formattedText);  
+         success = true; 
          
       }
       catch(FileNotFoundException ex)
@@ -329,7 +333,7 @@ public class SwimResultHandler
    {       
       List<SwimResult> results;
       List<SwimResult> best;
-      String resultStr;
+      String resultStr = "";
       
       results = getSwimResultsFromFile(FILENAME);
       
@@ -337,12 +341,18 @@ public class SwimResultHandler
       {
           best = getTopSwimmers(results, AMOUNT, i);
           
-          resultStr = presentBestSwimmers(best, DISCIPLINE_NAMES[i]);
-          
-          System.out.println(resultStr);
-          
-          saveToFile(SAVENAME ,resultStr);                              
+          resultStr += presentBestSwimmers(best, DISCIPLINE_NAMES[i]) + "\n";                                             
       }
+      
+      System.out.println(resultStr);
+      
+      Date date = new Date();
+      SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+      String dateString = format.format(date);
+      if (saveToFile(SAVENAME + dateString, "txt", resultStr))
+      {
+         System.out.println("Also saved as file: " + SAVENAME + dateString + ".txt");
+      }  
    }
 
     
