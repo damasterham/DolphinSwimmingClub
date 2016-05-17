@@ -2,6 +2,7 @@
 import java.text.SimpleDateFormat;
 public class SwimResult {
 
+   private int id;
 	private String name;
 	private int result;
 	private SimpleDateFormat date;
@@ -14,7 +15,7 @@ public class SwimResult {
    
    }
    
-   public SwimResult(String name, int result, SimpleDateFormat date, int discipline)
+   public SwimResult(int id, String name, int result, SimpleDateFormat date, int discipline)
    {
       setName(name);
       setResult(result);
@@ -22,12 +23,20 @@ public class SwimResult {
       setDiscipline(discipline);
    }
    
-   public SwimResult(String name, int result, SimpleDateFormat date, int discipline, String event, int placement)
+   public SwimResult(int id, String name, int result, SimpleDateFormat date, int discipline, String event, int placement)
    {
-      this(name,result,date,discipline);
+      this(id,name,result,date,discipline);
       setEvent(event);
       setPlacement(placement);
    }
+
+   public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return this.name;
@@ -77,4 +86,8 @@ public class SwimResult {
 		this.placement = placement;
 	}
 
+   public String toString()
+   {
+      return String.format("{0}", this.getResult());
+   }
 }
