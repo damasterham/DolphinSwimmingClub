@@ -3,7 +3,7 @@ import java.text.SimpleDateFormat;
 import java.lang.IndexOutOfBoundsException;
 public class SwimResult 
 {
-   private static final String[] DISCIPLINE_NAMES = new String[]{"Crawl", "Butterfly", "RygCrawl", "HundeSvømning", "Bryst"};
+   private static final String[] DISCIPLINE_NAMES = new String[]{"Crawl", "Butterfly", "RygCrawl", "HundeSvÃ¸mning", "Bryst"};
 
    private int id;
 	private String name;
@@ -109,9 +109,24 @@ public class SwimResult
 	}
 
 
+   public String toFormatString()
+   {
+      String format;
+      
+      format = String.format("%d;%s;%d;%s;%s", this.getId(), this.getName(), this.getResult(), this.getDate(), this.getDisciplineIndex());
+      
+      if (this.getEvent() != null && this.getEvent() != "" && this.getPlacement() != 0)
+      {
+         format += String.format(";%s;%d", this.getEvent(), this.getPlacement());
+      }
+      
+      return format;
+      
+   }
+   
    public String toString()
    {
-      return String.format("%d;%s;%d;%s;%s", this.getId(), this.getName(), this.getResult(), this.getDate(), this.getDiscipline());
+      return String.format("Name:%s Result:%d Date set:%s Discipline:%s", this.getName(), this.getResult(), this.getDate(), this.getDiscipline());
    }
    
    public static int getDisciplineAmount()

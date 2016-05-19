@@ -32,10 +32,9 @@ public class SwimResultHandler
       String path;
       File file;
       PrintStream output;
-      boolean success;
+      boolean success;            
             
-            
-      path = String.format("%s.%s",filename, extension);            
+      path = String.format("%s.%s", filename, extension);            
       success = false;
       
       try
@@ -52,7 +51,7 @@ public class SwimResultHandler
          success = true; 
          
       }
-      catch(FileNotFoundException ex)
+      catch (FileNotFoundException ex)
       {
          System.out.println(ex.getMessage());  
       }
@@ -76,7 +75,7 @@ public class SwimResultHandler
       
       if (saveToFile(SAVENAME + dateString, "txt", formattedString))
       {
-         System.out.println("Resultater også gemt som fil: " + SAVENAME + dateString + ".txt");
+         System.out.println("Resultater ogsÃ¥ gemt som fil: " + SAVENAME + dateString + ".txt");
       }  
    }   
 
@@ -90,7 +89,7 @@ public class SwimResultHandler
       
       for (int i = 0; i < list.size(); i++)
       {
-         format += list.get(i).toString() + "\n";
+         format += list.get(i).toFormatString() + "\n";
       }
       
       saveBestSwimmers(format);      
@@ -98,7 +97,7 @@ public class SwimResultHandler
    
    
    //Chance
-   private static String formatBestSwimmers(List<SwimResult> list)
+   private static String formatBestSwimmersByDisciplines(List<SwimResult> list)
    {
       String value;
       
@@ -106,12 +105,7 @@ public class SwimResultHandler
       
       if (list.isEmpty() == false)
       {
-      /*
-         value += "None\n";          
-      }
-      else
-      {
-      */
+      
          value = list.get(0).getDiscipline() + ":\n";
          
          for (int i = 0; i < list.size(); i++)
@@ -259,7 +253,7 @@ public class SwimResultHandler
       
       top = reduceToDiscipline(results, discipline);
       
-      if (top.isEmpty() != true)
+      if (top.isEmpty() == false)
       {
          top = reduceToBestMemberResults(top);
       
@@ -361,7 +355,7 @@ public class SwimResultHandler
           bestByDiscipline = getBestSwimmersFromDiscipline(results, AMOUNT, i);
           best.addAll(bestByDiscipline);
           
-          formattedString += formatBestSwimmers(bestByDiscipline) + "\n";                                             
+          formattedString += formatBestSwimmersByDisciplines(bestByDiscipline) + "\n";                                             
       }
       
       System.out.println(formattedString);
@@ -388,6 +382,7 @@ public class SwimResultHandler
 		// TODO - implement SwimResultHandler.saveResult
 	}
    
+   //Chance 
    private static int getInputInt(Scanner input, String mismatchError)
    {
       int value;
@@ -408,7 +403,7 @@ public class SwimResultHandler
       
    }
    
-   
+   //Chance
    private static int getInputIntWithinRange(Scanner input, int min, int max, String mismatchError, String rangeError)
    {
       int value;
@@ -447,16 +442,16 @@ public class SwimResultHandler
           
       //prompt if event
       System.out.println("Hvilken slags resultat er det?");
-      System.out.println("1:Træning, 2:Stævne");
+      System.out.println("1:TrÃ¦ning, 2:StÃ¦vne");
       
-      choice = getInputIntWithinRange(console, 1, 2, "Brug tal til at vælge.", "Talet er uden for mulige valg.");                  
+      choice = getInputIntWithinRange(console, 1, 2, "Brug tal til at vÃ¦lge.", "Talet er uden for mulige valg.");                  
       
       // if it is an event
       if (choice == 1)
       {
          System.out.print("Id: ");
          
-         result.setId(getInputInt(console, "Id skal være et tal."));
+         result.setId(getInputInt(console, "Id skal vÃ¦re et tal."));
       }
       else if (choice == 2)
       {
