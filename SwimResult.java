@@ -1,6 +1,9 @@
 
 import java.text.SimpleDateFormat;
-public class SwimResult {
+import java.lang.IndexOutOfBoundsException;
+public class SwimResult 
+{
+   private static final String[] DISCIPLINE_NAMES = new String[]{"Crawl", "Butterfly", "RygCrawl", "HundeSvømning", "Bryst"};
 
    private int id;
 	private String name;
@@ -10,6 +13,7 @@ public class SwimResult {
 	private String event;
 	private int placement;
    
+   // Constructors
    public SwimResult()
    {
    
@@ -19,8 +23,16 @@ public class SwimResult {
    {
       setName(name);
       setResult(result);
+      setDateFormat(date);
+      setDisciplineIndex(discipline);
+   }
+   
+   public SwimResult(int id, String name, int result, String date, int discipline)
+   {
+      setName(name);
+      setResult(result);
       setDate(date);
-      setDiscipline(discipline);
+      setDisciplineIndex(discipline);
    }
    
    public SwimResult(int id, String name, int result, SimpleDateFormat date, int discipline, String event, int placement)
@@ -29,65 +41,136 @@ public class SwimResult {
       setEvent(event);
       setPlacement(placement);
    }
+   
+   public SwimResult(int id, String name, int result, String date, int discipline, String event, int placement)
+   {
+      this(id,name,result,date,discipline);
+      setEvent(event);
+      setPlacement(placement);
+   }
 
-   public int getId() {
+   // Accessors
+   public int getId() 
+   {
 		return this.id;
 	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	
 
 	public String getName() {
 		return this.name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public int getResult() {
+	
+	public int getResult() 
+   {
 		return this.result;
 	}
 
-	public void setResult(int result) {
-		this.result = result;
-	}
 
-	public SimpleDateFormat getDate() {
+   public SimpleDateFormat getDateFormat() 
+   {
 		return this.date;
 	}
 
-	public void setDate(SimpleDateFormat date) {
-		this.date = date;
+   
+	public String getDate() 
+   {
+      try
+      {
+		   return this.date.toPattern();
+      }
+      catch (Exception ex)
+      {
+         System.out.println(ex.getMessage());
+      }
+      return null;
 	}
 
-	public int getDiscipline() {
+
+   public String getDiscipline() 
+   {
+		return DISCIPLINE_NAMES[this.discipline];
+	}
+
+
+	public int getDisciplineIndex() 
+   {
 		return this.discipline;
 	}
-
-	public void setDiscipline(int discipline) {
-		this.discipline = discipline;
-	}
+	
 
 	public String getEvent() {
 		return this.event;
 	}
 
-	public void setEvent(String event) {
-		this.event = event;
-	}
 
 	public int getPlacement() {
 		return this.placement;
 	}
 
-	public void setPlacement(int placement) {
-		this.placement = placement;
-	}
 
    public String toString()
    {
-      return String.format("{0}", this.getResult());
+      return String.format("%d;%s;%d;%s;%s", this.getId(), this.getName(), this.getResult(), this.getDate(), this.getDiscipline());
    }
+   
+   public static int getDisciplineAmount()
+   {
+      return DISCIPLINE_NAMES.length;
+   }
+   
+   // Mutators
+   public void setId(int id) 
+   {
+		this.id = id;
+	}
+   
+   
+   public void setName(String name) 
+   {
+		this.name = name;
+	}
+   
+   
+   public void setResult(int result) 
+   {
+		this.result = result;
+	}
+   
+   
+	public void setDateFormat(SimpleDateFormat date) 
+   {
+		this.date = date;
+	}
+   
+   
+	public void setDate(String date) 
+   {
+		this.date = new SimpleDateFormat(date);
+	}
+   
+   
+   public void setDisciplineIndex(int discipline) throws IndexOutOfBoundsException
+   {
+      if (discipline >= 0 && discipline < getDisciplineAmount())
+      {
+		   this.discipline = discipline;
+      }
+      else
+      {
+         throw new IndexOutOfBoundsException("The discipline index is out of bounds. The index pased was " + discipline + ", but the size of the disciplines is " + getDisciplineAmount());
+      }
+	}
+   
+   
+	public void setEvent(String event) 
+   {
+		this.event = event;
+	}
+   
+   
+	public void setPlacement(int placement) 
+   {
+		this.placement = placement;
+	}
 }

@@ -11,30 +11,23 @@ import java.lang.Exception;
 import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 
-
+// Should probably just be made into a static class
 public class SwimResultHandler 
 {
    private static final String FILENAME = "swimresults.dat";
    private static final String SAVENAME = "best_swimmers_";
    private static final String DELIMITER = ";";
-   private static final int DISCIPLINES = 5;
+   private static final int DISCIPLINES = SwimResult.getDisciplineAmount();
    private static final int AMOUNT = 5;
-   private static final String[] DISCIPLINE_NAMES = new String[]{"Crawl", "Butterfly", "RygCrawl", "HundeSvømning", "Bryst"};
-
+   
+/*
 	private SwimResult swimResult;
 	private List<SwimResult> swimResults;
    
-	public void createSwimResult() 
-   {
-		// TODO - implement SwimResultHandler.createSwimResult
-      
+*/   
    
-      
-      
-		//throw new UnsupportedOperationException();
-	}
-   
-   private boolean saveToFile(String filename, String extension, String formattedText)
+   // Chance
+   private static boolean saveToFile(String filename, String extension, String formattedText)
    {
       String path;
       File file;
@@ -69,31 +62,135 @@ public class SwimResultHandler
       }
    }
    
-   //Chance
-   private List<SwimResult> reduceToDiscipline(List<SwimResult> results, int discipline)
-   {
-      List<SwimResult> list;
-
-      list = new ArrayList<SwimResult>();
+    
+   // Chance
+   private static void saveBestSwimmers(String formattedString)
+   {     
+      Date date;
+      SimpleDateFormat format;
+      String dateString;
       
-      for (int i = 0; i < results.size(); i++)
+      date = new Date();      
+      format = new SimpleDateFormat("dd-MM-yyyy");      
+      dateString = format.format(date);
+      
+      if (saveToFile(SAVENAME + dateString, "txt", formattedString))
       {
-         SwimResult res;
-         
-         res = results.get(i);
-         
-         if (res.getDiscipline() == discipline)
-         {            
-            list.add(res);
-         }
+         System.out.println("Resultater også gemt som fil: " + SAVENAME + dateString + ".txt");
+      }  
+   }   
+
+
+   // Chance
+   private static void saveBestSwimmers(List<SwimResult> list)
+   {
+      String format;
+      
+      format = new String();
+      
+      for (int i = 0; i < list.size(); i++)
+      {
+         format += list.get(i).toString() + "\n";
       }
       
-      return list;
+      saveBestSwimmers(format);      
    }
    
    
    //Chance
-   private List<SwimResult> reduceToBestMemberResults(List<SwimResult> results)
+   private static String formatBestSwimmers(List<SwimResult> list)
+   {
+      String value;
+      
+      value = new String();
+      
+      if (list.isEmpty() == false)
+      {
+      /*
+         value += "None\n";          
+      }
+      else
+      {
+      */
+         value = list.get(0).getDiscipline() + ":\n";
+         
+         for (int i = 0; i < list.size(); i++)
+         {
+            SwimResult result;
+            result = list.get(i);
+            
+            value += String.format("Medlem: %s, Tid i sekunder: %s, Dato sat: %s%n", result.getName(), result.getResult(), result.getDate());
+         }
+      }      
+      
+      return value;
+   }
+   
+   
+   //Chance
+   private static int findWorstIndex(List<SwimResult> results)
+   {
+      SwimResult worst;
+      int worstIndex;
+      
+      worst = results.get(0);
+      worstIndex = 0;
+      
+      for (int i = 1; i < results.size(); i++)
+      {
+         SwimResult result;
+         
+         result = results.get(i);
+      
+         if (result.getResult() > worst.getResult())
+         {
+            worst = result;
+            worstIndex = i;
+         }
+      }
+      
+      return worstIndex;
+   }
+   
+   
+   //Chance
+   private static List<SwimResult> reduceToBestMembers(List<SwimResult> results, int amount)
+   {      
+      List<SwimResult> list;
+      SwimResult worst;
+      int worstIndex;
+      
+      if (results.size() <= amount)
+      {
+         return results; // returns the same results of if there 
+      }
+         
+      list = results.subList(0, amount);//new ArrayList<SwimResult>();
+      
+      worstIndex = findWorstIndex(list);
+      worst = list.get(worstIndex);           
+      
+      for (int i = amount; i < results.size(); i++) // look throught reamining swappping better results and determining new worst
+      {     
+         SwimResult result;
+         
+         result = results.get(i);
+       
+         if (result.getResult() < worst.getResult()) // if better result
+         {            
+            list.set(worstIndex, result); // overwrite worst with new time
+            
+            worstIndex = findWorstIndex(list); // finds the new worst result
+            worst = list.get(worstIndex); // sets the worst result                     
+         }
+      }
+      
+      return list;
+   }   
+   
+   
+   //Chance
+   private static List<SwimResult> reduceToBestMemberResults(List<SwimResult> results)
    {
       List<SwimResult> list;
       
@@ -133,76 +230,21 @@ public class SwimResultHandler
    
    
    //Chance
-   private int findWorstIndex(List<SwimResult> results)
+   private static List<SwimResult> reduceToDiscipline(List<SwimResult> results, int discipline)
    {
-      SwimResult worst;
-      int worstIndex;
-      
-      worst = results.get(0);
-      worstIndex = 0;
-      
-      for (int i = 1; i < results.size(); i++)
-      {
-         SwimResult result;
-         
-         result = results.get(i);
-      
-         if (result.getResult() > worst.getResult())
-         {
-            worst = result;
-            worstIndex = i;
-         }
-      }
-      
-      return worstIndex;
-   }
-   
-   
-   //Chance
-   private List<SwimResult> reduceToBestMembers(List<SwimResult> results, int amount)
-   {      
       List<SwimResult> list;
-      SwimResult worst;
-      int worstIndex;
-      
-      if (results.size() <= amount)
-      {
-         return results; // returns the same results of if there 
-      }
-         
+
       list = new ArrayList<SwimResult>();
       
-      worst = results.get(0);
-      list.add(worst);     
-      worstIndex = 0;   
-      
-      for (int i = 1; i < amount; i++) // get first 5 and finde worst
+      for (int i = 0; i < results.size(); i++)
       {
-         SwimResult result;
+         SwimResult res;
          
-         result = results.get(i);
-      
-         if (result.getResult() > worst.getResult())
-         {
-            worst = result;
-            worstIndex = i;
-         }
+         res = results.get(i);
          
-         list.add(result);
-      }
-      
-      for (int i = amount; i < results.size(); i++) // look throught reamining swappping better results and determining new worst
-      {     
-         SwimResult result;
-         
-         result = results.get(i);
-       
-         if (result.getResult() < worst.getResult()) // if better result
+         if (res.getDisciplineIndex() == discipline)
          {            
-            list.set(worstIndex, result); // overwrite worst with new time
-            
-            worstIndex = findWorstIndex(list); // finds the new worst result
-            worst = list.get(worstIndex); // sets the worst result                     
+            list.add(res);
          }
       }
       
@@ -211,7 +253,7 @@ public class SwimResultHandler
    
    
    //Chance
- 	private List<SwimResult> getTopSwimmers(List<SwimResult> results, int amount, int discipline)
+ 	private static List<SwimResult> getBestSwimmersFromDiscipline(List<SwimResult> results, int amount, int discipline)
    {
       List<SwimResult> top;
       
@@ -228,25 +270,26 @@ public class SwimResultHandler
 	}
    
 
-
    //Chance
-	private List<SwimResult> getSwimResultsFromFile(String filename) 
+	private static List<SwimResult> getSwimResultsFromFile(String filename) 
    {
       File data;
       Scanner input;
       Scanner row;
       List<SwimResult> results;
+      int i;
       
       results = new ArrayList<SwimResult>();        
       
       try
       {
-         data = new File(filename);
+         data = new File(filename); // The file must only contain valid rows, if there is an empty line it will bug
          input = new Scanner(data);
          
+         i = 0;
          while (input.hasNextLine())
          {
-            int i;            
+            int j;            
             SwimResult result;
             String next;
             
@@ -256,19 +299,19 @@ public class SwimResultHandler
             
             result = new SwimResult();
               
-            i = 0;
+            j = 0;
             
             while (row.hasNext())
             {     
                try
                {     
-                  switch (i)
+                  switch (j)
                   {
                      case 0: result.setId(row.nextInt()); break;
                      case 1: result.setName(row.next()); break;
                      case 2: result.setResult(row.nextInt()); break;
-                     case 3: result.setDate(new SimpleDateFormat(row.next())); break;
-                     case 4: result.setDiscipline(row.nextInt()); break;
+                     case 3: result.setDate(row.next()); break;
+                     case 4: result.setDisciplineIndex(row.nextInt()); break;
                      case 5: result.setEvent(row.next()); break;
                      case 6: result.setPlacement(row.nextInt()); break;
                   }   
@@ -277,11 +320,17 @@ public class SwimResultHandler
                {
                   System.out.println(ex.getMessage());
                }
+               catch (IndexOutOfBoundsException ex)
+               {
+                  System.out.println("Error in row " + i + ": " + ex.getMessage() + "\n");
+               }
                
-               i++;                  
+               j++;                  
             }
             
             results.add(result);
+            
+            i++;
           } 
       }
       catch (FileNotFoundException ex)
@@ -294,87 +343,148 @@ public class SwimResultHandler
       }       
 	}
    
-   //Chance
-   private void saveBestSwimmers(List<SwimResult> list)
-   {
-      // thought for saving in a more iterative save;
-   
-   }
-   
    
    //Chance
-   private String presentBestSwimmers(List<SwimResult> list, String discipline)
-   {
-      String value;
-      
-      value = discipline + ":\n";
-      
-      if (list.isEmpty())
-      {
-         value += "None\n";          
-      }
-      else
-      {
-         for (int i = 0; i < list.size(); i++)
-         {
-            SwimResult result;
-            result = list.get(i);
-            
-            value += String.format("Medlem: %s, Tid i sekunder: %s, Dato sat: %s%n", result.getName(), result.getResult(), result.getDate().toPattern());
-         }
-      }      
-      
-      return value;
-   }
-   
-   
-   //Chance
-   public void findBestSwimmers()
+   public static void findBestSwimmers()
    {       
       List<SwimResult> results;
+      List<SwimResult> bestByDiscipline;
       List<SwimResult> best;
-      String resultStr = "";
+      String formattedString;
       
       results = getSwimResultsFromFile(FILENAME);
+      formattedString = new String();
+      best = new ArrayList<SwimResult>();
       
       for (int i = 0; i < DISCIPLINES; i++)
       {
-          best = getTopSwimmers(results, AMOUNT, i);
+          bestByDiscipline = getBestSwimmersFromDiscipline(results, AMOUNT, i);
+          best.addAll(bestByDiscipline);
           
-          resultStr += presentBestSwimmers(best, DISCIPLINE_NAMES[i]) + "\n";                                             
+          formattedString += formatBestSwimmers(bestByDiscipline) + "\n";                                             
       }
       
-      System.out.println(resultStr);
-      
-      Date date = new Date();
-      SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-      String dateString = format.format(date);
-      if (saveToFile(SAVENAME + dateString, "txt", resultStr))
+      System.out.println(formattedString);
+
+      if (best.isEmpty() == false)
       {
-         System.out.println("Also saved as file: " + SAVENAME + dateString + ".txt");
-      }  
+         saveBestSwimmers(best);
+      }
+      
    }
 
     
-	public void registerSwimmingResult(int resultInSeconds, SimpleDateFormat date, int discipline, String event, int placement) 
+	public static void registerSwimmingResult(int resultInSeconds, SimpleDateFormat date, int discipline, String event, int placement) 
    {
 		// TODO - implement SwimResultHandler.registerSwimmingResult
 	}
-	public void registerSwimmingResult(int resultInSeconds, SimpleDateFormat date, int discipline) 
+	public static void registerSwimmingResult(int resultInSeconds, SimpleDateFormat date, int discipline) 
    {
 		// TODO - implement SwimResultHandler.registerSwimmingResult
 	}
 
-	public void saveResult() 
+	public static void saveResult() 
    {
 		// TODO - implement SwimResultHandler.saveResult
 	}
-
+   
+   private static int getInputInt(Scanner input, String mismatchError)
+   {
+      int value;
+            
+      while (true)
+      {
+         try
+         {
+            value = input.nextInt();
+            return value;          
+         }
+         catch (InputMismatchException ex)
+         {
+            System.out.println(mismatchError);
+            input.nextLine();
+         }
+      }
+      
+   }
+   
+   
+   private static int getInputIntWithinRange(Scanner input, int min, int max, String mismatchError, String rangeError)
+   {
+      int value;
+            
+      while (true)
+      {
+         try
+         {
+            value = input.nextInt();
+            
+            if (value >= min && value <= max)
+            {
+               return value;
+            }
+            else
+            {
+               System.out.println(rangeError);
+            }
+            
+         }
+         catch (InputMismatchException ex)
+         {
+            System.out.println(mismatchError);
+            input.nextLine();
+         }
+      }
+      
+   }
+   
+   public static void createSwimResult(Scanner console) 
+   {  
+      int choice;
+      SwimResult result;
+      
+      result = new SwimResult();
+          
+      //prompt if event
+      System.out.println("Hvilken slags resultat er det?");
+      System.out.println("1:Træning, 2:Stævne");
+      
+      choice = getInputIntWithinRange(console, 1, 2, "Brug tal til at vælge.", "Talet er uden for mulige valg.");                  
+      
+      // if it is an event
+      if (choice == 1)
+      {
+         System.out.print("Id: ");
+         
+         result.setId(getInputInt(console, "Id skal være et tal."));
+      }
+      else if (choice == 2)
+      {
+      
+      }
+         // get all data  
+      
+      // else
+         // get all basic data
+         
+      // ask to save result
+      
+      // save result
+      
+      // print message
+      
+      
+	}
+   
+   
 
    public static void main(String[] args)
    {
-      SwimResultHandler swh = new SwimResultHandler();
+      Scanner console;
       
-      swh.findBestSwimmers();
+      console = new Scanner(System.in);
+     
+      //SwimResultHandler.createSwimResult(console);
+      SwimResultHandler.findBestSwimmers();    
    }
 }
