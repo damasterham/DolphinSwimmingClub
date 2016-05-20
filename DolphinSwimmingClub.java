@@ -53,6 +53,8 @@ public class DolphinSwimmingClub
    } 
    
    
+
+   
    private static void selectTrainerFunc(Scanner console)
    {
       int selection;
@@ -94,7 +96,7 @@ public class DolphinSwimmingClub
       
       if (selection == 1)
       {
-         //FormandFunc.bla();       Jeres handler her
+         MemberHandler.createNewMember();
       }
    }
    

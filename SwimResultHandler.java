@@ -25,6 +25,40 @@ public class SwimResultHandler
 	private List<SwimResult> swimResults;
    
 */   
+   // Chance
+   private static boolean saveToFile(String filename, String formattedText)
+   {
+      File file;
+      PrintStream output;
+      boolean success;            
+            
+      success = false;
+      
+      try
+      {
+         file = new File(filename);
+         
+         if (file.exists() == false)
+         {
+            file.createNewFile();                                                   
+         }
+         
+         output = new PrintStream(file);
+         output.print(formattedText);  
+         success = true; 
+         
+      }
+      catch (FileNotFoundException ex)
+      {
+         System.out.println(ex.getMessage());  
+      }
+      finally
+      {
+         return success;
+      }
+   }
+
+   
    
    // Chance
    private static boolean saveToFile(String filename, String extension, String formattedText)
@@ -470,16 +504,5 @@ public class SwimResultHandler
       
       
 	}
-   
-   
 
-   public static void main(String[] args)
-   {
-      Scanner console;
-      
-      console = new Scanner(System.in);
-     
-      //SwimResultHandler.createSwimResult(console);
-      SwimResultHandler.findBestSwimmers();    
-   }
 }
