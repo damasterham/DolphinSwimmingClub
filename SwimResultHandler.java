@@ -402,42 +402,110 @@ public class SwimResultHandler
    }
 
     
-	public static void registerSwimmingResult(int resultInSeconds, SimpleDateFormat date, int discipline, String event, int placement) 
-   {
-		// TODO - implement SwimResultHandler.registerSwimmingResult
-	}
-	public static void registerSwimmingResult(int resultInSeconds, SimpleDateFormat date, int discipline) 
-   {
-		// TODO - implement SwimResultHandler.registerSwimmingResult
-	}
-
-	public static void saveResult() 
-   {
-		// TODO - implement SwimResultHandler.saveResult
-	}
-   
-   //Chance 
-   private static int getInputInt(Scanner input, String mismatchError)
-   {
-      int value;
-            
-      while (true)
-      {
-         try
-         {
-            value = input.nextInt();
-            return value;          
-         }
-         catch (InputMismatchException ex)
-         {
-            System.out.println(mismatchError);
-            input.nextLine();
-         }
-      }
+	// Lasse
+   public static void createSwimResult(Scanner console){
       
+      
+      SwimResult nytresultat;
+      List<SwimResult> eksisterenderesultater;
+      
+      eksisterenderesultater = getSwimResultsFromFile(FILENAME);
+      
+      nytresultat = promtSwimResultInfo(console);
+      
+      eksisterenderesultater.add(nytresultat);
+      
+      String formateretresultat;
+      
+      formateretresultat = resultListToString(eksisterenderesultater);
+      
+      saveToFile(FILENAME, formateretresultat);     
    }
    
-   //Chance
+   //Lasse
+   private static String resultListToString(List<SwimResult> list)
+   {
+      String format;
+      
+      format = new String();
+      
+      for (int i = 0; i < list.size(); i++)
+      {
+         format += list.get(i).toFormatString() + "\n";
+      }
+      return format;
+   }
+   
+   
+   // Lasse
+   public static SwimResult promtSwimResultInfo(Scanner console)     
+   {
+      
+      System.out.println("Du vil blive bedt om at indtaste fÃ¸lgende data:");
+      System.out.println("ID nr pÃ¥ svÃ¸mmeren");
+      System.out.println("Navn pÃ¥ svÃ¸mmeren");
+      System.out.println("Tiden i sekunder, ingen hundrededele");
+      System.out.println("Dato for resultatet (02-08-16)");
+      System.out.println("SvÃ¸mme Diciplin (crawl, brystsvÃ¸mning osv...");
+      System.out.println();
+      System.out.println("Hvis resultatet er et stÃ¦vne skal fÃ¸lgende ydereligere indtastes");
+      System.out.println("StÃ¦vnets navn");
+      System.out.println("svÃ¸mmerens placering til stevnet");
+      System.out.println("- - - - -");
+      
+
+      System.out.print("ID nr:");
+      int id = console.nextInt();
+      console.nextLine();
+  //For at "bruge" det whitespace enter der kommer med ved indtastningen  
+      
+     
+      System.out.print("Navn:");     
+      String navn = console.nextLine();      
+      
+      System.out.print("Tid(sekunder):");     
+      int tid = console.nextInt();
+      console.nextLine();  //For at "bruge" det whitespace enter der kommer med ved indtastningen
+      System.out.print("Dato for resultatet:");     
+      String dato = console.nextLine();
+      
+      System.out.print("SvÃ¸mmediciplin ");
+      System.out.print("[0] for " + SwimResult.getDiscipline(0));
+      System.out.print("[1] for " + SwimResult.getDiscipline(1));
+      System.out.print("[2] for " + SwimResult.getDiscipline(2));
+      System.out.print("[3] for " + SwimResult.getDiscipline(3));
+      System.out.print("[4] for " + SwimResult.getDiscipline(4));     
+      int diciplin = console.nextInt();
+      console.nextLine();  //For at "bruge" det whitespace enter der kommer med ved indtastningen
+      
+      System.out.print("Er det fra et event? tast 0 for nej, 1 for ja: ");
+      int jaellernej = console.nextInt();
+      console.nextLine();
+      
+            
+      SwimResult nytresultat = new SwimResult();
+      nytresultat.setId(id); 
+      nytresultat.setName(navn);
+      nytresultat.setResult(tid);
+      nytresultat.setDate(dato);
+      nytresultat.setDisciplineIndex(diciplin);
+      
+      // IF statement? eller overload en method med event sÃ¦t sammen.
+      if(jaellernej == 1){
+         //koden for event til
+         System.out.print("Event/stÃ¦vne navn: ");     
+         String eventNavn = console.nextLine();
+      
+         System.out.print("Placering til eventet: ");     
+         int placering = console.nextInt();
+         console.nextLine();  //For at "bruge" det whitespace enter der kommer med ved indtastningen
+      
+         nytresultat.setEvent(eventNavn);
+         nytresultat.setPlacement(placering);
+      
+      }
+      return nytresultat; 
+   }   //Chance
    private static int getInputIntWithinRange(Scanner input, int min, int max, String mismatchError, String rangeError)
    {
       int value;
@@ -466,43 +534,5 @@ public class SwimResultHandler
       }
       
    }
-   
-   public static void createSwimResult(Scanner console) 
-   {  
-      int choice;
-      SwimResult result;
-      
-      result = new SwimResult();
-          
-      //prompt if event
-      System.out.println("Hvilken slags resultat er det?");
-      System.out.println("1:Træning, 2:Stævne");
-      
-      choice = getInputIntWithinRange(console, 1, 2, "Brug tal til at vælge.", "Talet er uden for mulige valg.");                  
-      
-      // if it is an event
-      if (choice == 1)
-      {
-         System.out.print("Id: ");
-         
-         result.setId(getInputInt(console, "Id skal være et tal."));
-      }
-      else if (choice == 2)
-      {
-      
-      }
-         // get all data  
-      
-      // else
-         // get all basic data
-         
-      // ask to save result
-      
-      // save result
-      
-      // print message
-      
-      
-	}
 
 }

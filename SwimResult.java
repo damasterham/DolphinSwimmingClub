@@ -91,6 +91,12 @@ public class SwimResult
    {
 		return DISCIPLINE_NAMES[this.discipline];
 	}
+   
+   
+   public static String getDiscipline(int id)
+   {
+		return DISCIPLINE_NAMES[id];
+   }
 
 
 	public int getDisciplineIndex() 

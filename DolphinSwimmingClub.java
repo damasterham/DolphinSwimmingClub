@@ -65,7 +65,7 @@ public class DolphinSwimmingClub
       
       switch (selection)    
       {
-         //case 1: SwimResultHandler.createNewRestult; break;
+         case 1: SwimResultHandler.createSwimResult(console); break;
          case 2: SwimResultHandler.findBestSwimmers(); break;
       }
    }
@@ -81,7 +81,8 @@ public class DolphinSwimmingClub
       
       if (selection == 1)
       {
-         //KassererFunc.bla();   Jeres handler her
+         DebtHandler debt = new DebtHandler();
+         debt.getMembersWithDebt();
       }   
    }
    
