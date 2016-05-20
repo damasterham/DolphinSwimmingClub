@@ -1,84 +1,81 @@
-package DolhpinSwimClubDCD;
+import java.util.ArrayList;
 
-public class Member {
-
-	private boolean[] disciplines;
+public class Member
+{
+	// fields
 	private String name;
 	private int age;
-	private boolean activity;
-	private boolean ambitionLevel;
-	private double debt;
-
-	public boolean[] getDisciplines() {
-		return this.disciplines;
+	private String activity;
+	private String ambition;
+	private String disciplines;
+	
+	// ****************************
+	// CONSTRUCTORS
+	// ****************************
+	public Member (String name, int age, String activity, String ambition)
+	{
+		this.name = name;
+		this.age = age;
+		this.activity = activity;
+		this.ambition = ambition;
 	}
-
-	/**
-	 * 
-	 * @param disciplines
-	 */
-	public void setDisciplines(boolean[] disciplines) {
+	
+	public Member (String name, int age, String activity, String ambition, String disciplines)
+	{
+		this.name = name;
+		this.age = age;
+		this.activity = activity;
+		this.ambition = ambition;
 		this.disciplines = disciplines;
 	}
-
-	public String getName() {
-		return this.name;
+	
+	// ********************************
+	// ACCESSORS - GET METHODS
+	//*********************************
+	public String getName()
+	{
+		return name;
 	}
-
-	/**
-	 * 
-	 * @param name
-	 */
-	public void setName(String name) {
-		this.name = name;
+	
+	public int getAge()
+	{
+		return age;
 	}
-
-	public int getAge() {
-		return this.age;
+	
+	public String getActivity()
+	{
+		return activity;
 	}
-
-	/**
-	 * 
-	 * @param age
-	 */
-	public void setAge(int age) {
-		this.age = age;
+	
+	public String getAmbition()
+	{
+		return ambition;
 	}
-
-	public boolean getActivity() {
-		return this.activity;
+	
+	public String getDisciplines()
+	{
+		return disciplines;
 	}
-
-	/**
-	 * 
-	 * @param activity
-	 */
-	public void setActivity(boolean activity) {
-		this.activity = activity;
+	
+	public String toString()
+	{
+		if (disciplines == null)
+		{
+			return getName() + ";" + getAge() + ";" + getActivity() + ";" + getAmbition(); 
+		}
+		else
+		{
+			return getName() + ";" + getAge() + ";" + getActivity() + 
+					";" + getAmbition() + ";" + getDisciplines();
+		}
 	}
-
-	public boolean getAmbitionLevel() {
-		return this.ambitionLevel;
+	
+	// ********************************
+	// MUTATORS - SET METHODS
+	// ********************************
+	public void setDisciplines(String disciplines)
+	{
+		this.disciplines = disciplines;
 	}
-
-	/**
-	 * 
-	 * @param ambitionLevel
-	 */
-	public void setAmbitionLevel(boolean ambitionLevel) {
-		this.ambitionLevel = ambitionLevel;
-	}
-
-	public double getDebt() {
-		return this.debt;
-	}
-
-	/**
-	 * 
-	 * @param debt
-	 */
-	public void setDebt(double debt) {
-		this.debt = debt;
-	}
-
+	
 }
